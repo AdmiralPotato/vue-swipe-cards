@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Vue Swipe Cards</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.css"/>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css"/>
+	<link rel="stylesheet" href="./vue-swipe-cards.css"/>
+	<style>
+		.vue-swipe-cards{
+			background-color: #333;
+		}
+		.styledHolder {
+			font-size: 10rem;
+			line-height: 15rem;
+			height: 15rem;
+			margin: 0.25rem;
+			text-align: center;
+			background-color: #b37;
+		}
+		section{
+			padding: 1rem 0;
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<section>
+				<h1>vue-swipe-cards Vue.js 2 component demos</h1>
+				<p>The HTML source of this page may be viewed at <code><a href="https://github.com/AdmiralPotato/vue-swipe-cards/blob/master/index.html" target="_blank">index.html</a></code>, and the JavaScript that drives the following demos can be found in <code><a href="https://github.com/AdmiralPotato/vue-swipe-cards/blob/master/demos.js" target="_blank">demos.js</a></code>.</p>
+			</section>
+
+			<section class="demo-full-width">
+
+				<h2>Full Width</h2>
+				<p>Each element that you place inside of the component will be wrapped in its own card of appropriate width. The height if the cards should be constant, and defined by how you style the elements you put in the component. By default, the <code>&lt;vue-swipe-cards&gt;</code> component assigns card widths to be the same as their parent element.</p>
+
+				<div id="demo-full-width">
+					<vue-swipe-cards>
+						<div class="styledHolder"><i class="fi-die-one"></i></div>
+						<div class="styledHolder"><i class="fi-die-two"></i></div>
+						<div class="styledHolder"><i class="fi-die-three"></i></div>
+					</vue-swipe-cards>
+				</div>
+
+			</section>
+
+			<section class="demo-markup-template">
+
+				<h2>Partial Card Width via Markup Template</h2>
+				<p>Partial card widths are practical for illustrating to users that there is more content in this category to see if they scroll or swipe horizontally.</p>
+				<p>If writing your component template in Markup, you would use the attribute <code>:num-cards-visible="2.5"</code> to scale the cards such that 2.5 cards are visible within the width of the parent element.</p>
+
+				<style>
+					.demo-markup-template .styledHolder {
+						background-color: #37b;
+						font-size: 7.5rem;
+					}
+				</style>
+
+				<div id="demo-markup-template">
+					<vue-swipe-cards :num-cards-visible="2.5">
+						<div v-for="card in cards" class="styledHolder">
+							<i :class="card"></i>
+						</div>
+					</vue-swipe-cards>
+				</div>
+
+			</section>
+
+			<section class="demo-string-template">
+
+				<h2>Partial Card Width via String Template</h2>
+				<p>If writing your component template in String Templates, you would use the attribute <code>:numCardsVisible="3.5"</code> to scale the cards such that 3.5 cards are visible within the width of the parent element.</p>
+
+				<style>
+					.demo-string-template .styledHolder {
+						background-color: #7b3;
+						font-size: 5rem;
+					}
+				</style>
+
+				<div id="demo-string-template"></div>
+
+			</section>
+		</div>
+	</div>
+</div>
+
+
+<script src="https://unpkg.com/vue@2.x/dist/vue.js"></script>
+<script src="./vue-swipe-cards.js"></script>
+<script src="./demos.js"></script>
+</body>
+</html>

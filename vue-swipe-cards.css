@@ -1,0 +1,20 @@
+/*Prevents the cards from being displayed before Vue transforms them into div.vue-swipe-cards*/
+vue-swipe-cards{
+	display: none;
+}
+
+.vue-swipe-cards{
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.vue-swipe-cards .swipe-expander:after {
+	content: ' ';
+	display: block;
+	clear: both;
+}
+
+.vue-swipe-cards .swipe-card{
+	float: left;
+	padding: 0;
+}
