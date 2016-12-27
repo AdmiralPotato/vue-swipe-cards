@@ -4,10 +4,26 @@ vue-swipe-cards{
 }
 
 .vue-swipe-cards{
-	overflow-x: auto;
-	overflow-y: hidden;
+	overflow: hidden;
+	position: relative;
 }
 
+.vue-swipe-cards .swipe-scroller{
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: relative;
+	-webkit-overflow-scrolling: auto;
+	overflow-scrolling: auto;
+}
+.vue-swipe-cards .swipe-scroller.momentumScroll {
+	-webkit-overflow-scrolling: touch;
+	overflow-scrolling: touch;
+}
+
+.vue-swipe-cards .swipe-expander{
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
 .vue-swipe-cards .swipe-expander:after {
 	content: ' ';
 	display: block;
@@ -17,4 +33,30 @@ vue-swipe-cards{
 .vue-swipe-cards .swipe-card{
 	float: left;
 	padding: 0;
+}
+
+.vue-swipe-cards .dotHolder{
+	position: relative;
+	left: 0;
+	right: 0;
+	top: -1.5rem;
+	font-size: 0;
+	text-align: center;
+}
+
+.vue-swipe-cards .dot{
+	display: inline-block;
+	opacity: 0.5;
+	background-color: #fff;
+	border: 2px solid #333;
+	width: 1rem;
+	height: 1rem;
+	margin: 0.25rem;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.vue-swipe-cards .dot.active{
+	opacity: 0.5;
+	background-color: #333;
 }
