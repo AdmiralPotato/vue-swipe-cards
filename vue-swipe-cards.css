@@ -9,9 +9,12 @@ vue-swipe-cards{
 }
 
 .vue-swipe-cards .swipe-scroller{
+	overflow: hidden;
+	position: relative;
+}
+.vue-swipe-cards .swipe-scroller.nativeScroll {
 	overflow-x: auto;
 	overflow-y: hidden;
-	position: relative;
 	-webkit-overflow-scrolling: auto;
 	overflow-scrolling: auto;
 }
@@ -21,8 +24,8 @@ vue-swipe-cards{
 }
 
 .vue-swipe-cards .swipe-expander{
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
+	-webkit-transform: rotate3d(0, 0, 0, 0);
+	transform: rotate3d(0, 0, 0, 0);
 }
 .vue-swipe-cards .swipe-expander:after {
 	content: ' ';
