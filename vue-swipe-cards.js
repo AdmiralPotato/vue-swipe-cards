@@ -10,7 +10,6 @@ Vue.component(
 				id: 'vue-swipe-card-' + vueSwipeCardCount,
 				parentWidth: 0,
 				numCards: 0,
-				width: 0,
 				cardWidth: 0,
 				cardsVisible: 0,
 				expanderWidth: 0,
@@ -20,6 +19,9 @@ Vue.component(
 				cardIndex: 0,
 				x: 0
 			};
+			if(navigator.userAgent.search(/iPhone|iPad|iPod/) !== -1){
+				data.needsIosScrollHack = true;
+			}
 			return data;
 		},
 		props: {
@@ -71,6 +73,11 @@ Vue.component(
 					sameViewportWidth &&
 					sameNumberOfCardVisible
 				)){
+					if(t.needsIosScrollHack){
+						window.requestAnimationFrame(function(){
+							t.needsIosScrollHack = false;
+						});
+					}
 					t.parentWidth = parentWidth;
 					t.numCards = numCards;
 					t.cardsVisible = t.numCardsVisible;
@@ -166,14 +173,14 @@ Vue.component(
 			},
 			handleScroll: function(event) {
 				let t = this;
-				let numCards = t.numCards;
-				let x = event.currentTarget.scrollLeft;
-				let maximumScrollPosition = t.maxScrollPosition;
-				let scrollCompletionRatio = x / maximumScrollPosition;
-				//don't allow scroll bounce to set state
-				if (x >= 0 && x <= maximumScrollPosition) {
-					t.x = x;
-					if (!t.scrollInitiator) {
+				if(!t.scrollInitiator) {
+					let numCards = t.numCards;
+					let x = event.currentTarget.scrollLeft;
+					let maximumScrollPosition = t.maxScrollPosition;
+					let scrollCompletionRatio = x / maximumScrollPosition;
+					//don't allow scroll bounce to set state
+					if (x >= 0 && x <= maximumScrollPosition) {
+						t.x = x;
 						t.cardIndex = Math.round(scrollCompletionRatio * (numCards - 1));
 					}
 				}
@@ -213,7 +220,7 @@ Vue.component(
 					let shouldSnap = t.snapToCard && !t.scrollInitiator;
 					let point = shouldSnap ? t.getPointByTouch(touchEvent) : null;
 					if (point) {
-						t[`drag${eventName}`](point);
+						t[`drag${eventName}`](point, touchEvent);
 					}
 				};
 			},
@@ -221,7 +228,7 @@ Vue.component(
 				let t = this;
 				t.startX = t.x;
 			},
-			dragMove: function(point) {
+			dragMove: function(point, event) {
 				let t = this;
 				if (t.isSwiping === null) {
 					t.isSwiping = t.isUserScrollingHorizontally(point);
@@ -306,24 +313,23 @@ Vue.component(
 				swipeExpanderOptions,
 				slots
 			);
+			let swipeHandlers = {};
+			if(t.snapToCard){
+				swipeHandlers.touchstart = t.handleTouchStart;
+				swipeHandlers.touchmove = t.handleTouchMove;
+				swipeHandlers.touchend = t.handleTouchEnd;
+			} else {
+				swipeHandlers.scroll = t.handleScroll;
+			}
 			let swipeScroller = createElement(
 				'div',
 				{
 					staticClass: 'swipe-scroller',
 					'class': {
-						nativeScroll: !t.snapToCard,
-						momentumScroll: !t.snapToCard
+						nativeScroll: !t.snapToCard && !t.needsIosScrollHack,
+						momentumScroll: !t.snapToCard && !t.needsIosScrollHack
 					},
-					on:{
-						touchstart: t.handleTouchStart,
-						touchmove: t.handleTouchMove,
-						touchend: t.handleTouchEnd,
-						scroll: function(event){
-							if(!t.scrollInitiator){
-								t.handleScroll(event);
-							}
-						}
-					}
+					on: swipeHandlers
 				},
 				[swipeExpander]
 			);

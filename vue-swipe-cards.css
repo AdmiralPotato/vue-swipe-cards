@@ -18,7 +18,7 @@ vue-swipe-cards{
 	-webkit-overflow-scrolling: auto;
 	overflow-scrolling: auto;
 }
-.vue-swipe-cards .swipe-scroller.momentumScroll {
+.vue-swipe-cards .swipe-scroller.nativeScroll.momentumScroll {
 	-webkit-overflow-scrolling: touch;
 	overflow-scrolling: touch;
 }
