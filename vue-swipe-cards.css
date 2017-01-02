@@ -42,12 +42,13 @@ vue-swipe-cards{
 	position: relative;
 	left: 0;
 	right: 0;
-	top: -1.5rem;
+	height: 0;
 	font-size: 0;
 	text-align: center;
 }
 
 .vue-swipe-cards .dot{
+	position: relative;
 	display: inline-block;
 	opacity: 0.5;
 	background-color: #fff;
@@ -57,6 +58,7 @@ vue-swipe-cards{
 	margin: 0.25rem;
 	border-radius: 50%;
 	cursor: pointer;
+	top: -2rem;
 }
 
 .vue-swipe-cards .dot.active{
