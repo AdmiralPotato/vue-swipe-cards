@@ -86,6 +86,35 @@
 				<div id="demo-string-template"></div>
 
 			</section>
+
+			<section class="demo-touch-mixin">
+
+				<h2>Touch Handling Mixin</h2>
+				<p>This component makes use of a touch handling mixin which other components may benefit from using. You may add it to your component by means of <code>mixins: [touchHandlingMixin]</code>, then adding <code>@touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd"</code> event listeners to the desired object.</p>
+				<p>The above event handlers will call locally defined methods of <code>dragStart, dragMove, and dragEnd</code>. Parameters provided are <code>point</code> and <code>event</code>. Coordinates of the point are localized to the coordinates of the interior of the element the listeners are bound to.</p>
+
+				<style>
+					.demo-touch-mixin .demo-touch-mixin-holder {
+						position: relative;
+						height: 10rem;
+						background-color: #333333;
+					}
+					.demo-touch-mixin .locationDisplay {
+						position: absolute;
+						background-color: #f00;
+						width: 2rem;
+						height: 2rem;
+						transform: translate(-50%, -50%);
+						border-radius: 50%;
+					}
+					.demo-touch-mixin .isDragging .locationDisplay{
+						background-color: #0f0;
+					}
+				</style>
+
+				<div id="demo-touch-mixin"></div>
+
+			</section>
 		</div>
 	</div>
 </div>

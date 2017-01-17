@@ -1,9 +1,67 @@
 "use strict";
 
+let touchHandlingMixin = {
+	created: function(){
+		let t = this;
+		//internal properties that should not be observables,
+		//and need not be redefined each time the render method is run
+		t.startPoint = null;
+		t.handleTouchStart = t.createTouchHandler('Start');
+		t.handleTouchMove = t.createTouchHandler('Move');
+		t.handleTouchEnd = t.createTouchHandler('End');
+	},
+	methods: {
+		getPointByTouch: function(touchEvent){
+			let t = this;
+			let touches = touchEvent.changedTouches;
+			let result = null;
+			let point = null;
+			let isStart = t.startPoint === null;
+			if (isStart) {
+				result = touches[0];
+			} else {
+				for (let i = 0; i < touches.length; i++) {
+					let touch = touches[i];
+					if (touch.identifier === t.startPoint.id) {
+						result = touch;
+						break;
+					}
+				}
+			}
+			if (result) {
+				let bounds = event.currentTarget.getBoundingClientRect();
+				point = {
+					x: result.clientX - bounds.left,
+					y: result.clientY - bounds.top,
+					id: result.identifier
+				};
+				if(isStart){
+					t.startPoint = point;
+				}
+			}
+			return point;
+		},
+		createTouchHandler(eventName){
+			let t = this;
+			return function(touchEvent){
+				//console.log(touchEvent);
+				let point = t.getPointByTouch(touchEvent);
+				if (point) {
+					t[`drag${eventName}`](point, touchEvent);
+					if(eventName === 'End'){
+						t.startPoint = null;
+					}
+				}
+			};
+		},
+	}
+};
+
 let vueSwipeCardCount = 0;
 Vue.component(
 	'vue-swipe-cards',
 	{
+		mixins: [touchHandlingMixin],
 		data: function(){
 			vueSwipeCardCount += 1;
 			let data = {
@@ -40,10 +98,6 @@ Vue.component(
 			//and need not be redefined each time the render method is run
 			t.startX = null;
 			t.isSwiping = null;
-			t.startPoint = null;
-			t.handleTouchStart = t.createTouchHandler('Start');
-			t.handleTouchMove = t.createTouchHandler('Move');
-			t.handleTouchEnd = t.createTouchHandler('End');
 		},
 		mounted: function(){
 			let t = this;
@@ -185,45 +239,6 @@ Vue.component(
 					}
 				}
 			},
-			getPointByTouch: function(touchEvent){
-				let t = this;
-				let touches = touchEvent.changedTouches;
-				let result = null;
-				let point = null;
-				let isStart = t.startPoint === null;
-				if (isStart) {
-					result = touches[0];
-				} else {
-					for (let i = 0; i < touches.length; i++) {
-						let touch = touches[i];
-						if (touch.identifier === t.startPoint.id) {
-							result = touch;
-							break;
-						}
-					}
-				}
-				if (result) {
-					point = {
-						x: result.clientX,
-						y: result.clientY,
-						id: result.identifier
-					};
-					if(isStart){
-						t.startPoint = point;
-					}
-				}
-				return point;
-			},
-			createTouchHandler(eventName){
-				let t = this;
-				return function(touchEvent){
-					let shouldSnap = t.snapToCard && !t.scrollInitiator;
-					let point = shouldSnap ? t.getPointByTouch(touchEvent) : null;
-					if (point) {
-						t[`drag${eventName}`](point, touchEvent);
-					}
-				};
-			},
 			dragStart: function(point) {
 				let t = this;
 				t.startX = t.x;
@@ -250,7 +265,6 @@ Vue.component(
 					t.setIndex(nextCardIndex);
 				}
 				t.startX = null;
-				t.startPoint = null;
 				t.isSwiping = null;
 			},
 			getRelativeDragDirection: function(x){
@@ -314,7 +328,7 @@ Vue.component(
 				slots
 			);
 			let swipeHandlers = {};
-			if(t.snapToCard){
+			if(t.snapToCard && !t.scrollInitiator){
 				swipeHandlers.touchstart = t.handleTouchStart;
 				swipeHandlers.touchmove = t.handleTouchMove;
 				swipeHandlers.touchend = t.handleTouchEnd;
