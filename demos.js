@@ -37,6 +37,24 @@ let demoStringTemplate = new Vue({
 	`
 });
 
+let demoStartIndex = new Vue({
+	el: '#demo-start-index',
+	data: {
+		cards: [
+			'fi-die-one',
+			'fi-die-two',
+			'fi-die-three'
+		]
+	},
+	template: `
+		<vue-swipe-cards :startIndex="1">
+			<div v-for="card in cards" class="styledHolder">
+				<i :class="card"></i>
+			</div>
+		</vue-swipe-cards>
+	`
+});
+
 
 let demoTouchMixin = new Vue({
 	el: '#demo-touch-mixin',

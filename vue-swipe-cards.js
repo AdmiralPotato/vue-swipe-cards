@@ -87,6 +87,10 @@ Vue.component(
 				type: Number,
 				default: 1
 			},
+			startIndex: {
+				type: Number,
+				default: 0
+			},
 			debug: {
 				type: Boolean,
 				default: false
@@ -98,6 +102,9 @@ Vue.component(
 			//and need not be redefined each time the render method is run
 			t.startX = null;
 			t.isSwiping = null;
+			if(t.startIndex){
+				t.cardIndex = t.startIndex;
+			}
 		},
 		mounted: function(){
 			let t = this;
